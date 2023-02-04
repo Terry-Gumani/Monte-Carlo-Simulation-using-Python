@@ -1,0 +1,45 @@
+# Install yfinance (Yahoo Finance market data downloader) 
+!pip install yfinance
+
+
+# Import external packages
+import numpy as np
+import pandas as pd
+import yfinance as yf
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+%matplotlib inline
+
+
+# Extract data from Yahoo Finance
+ticker = 'MSFT' 
+stock_data = pd.DataFrame()
+stock_data[ticker] = yf.download(ticker, start='2000-1-1',end='2019-12-31')['Adj Close']
+
+# Plot MSFT closing prices
+stock_data.plot(figsize=(10, 6));
+
+
+# Calculate historical log returns
+log_returns = np.log(1 + stock_data.pct_change())
+
+# Show all the log returns
+log_returns.plot(figsize = (10, 6));
+
+# Show the distribution of the log returns
+log_returns.plot.density();
+
+
+# Calculate key statistic measures
+mean = log_returns.mean()
+variance = log_returns.var()
+STD = log_returns.std()
+
+# How to generate 10,000 random numbers betwen 0 and 1.
+random_numbers = np.random.rand(10000)
+
+# Use those randomly generated numbers to sample from a normal distribution
+normal_random_numbers = norm.ppf(random_numbers)
+
+# Plot each of the 10,000 randombly generated numbers from the normal distribution
+plt.hist(normal_random_numbers, bins = 100);
